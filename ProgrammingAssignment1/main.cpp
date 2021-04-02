@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <stdio.h>
+
 using namespace std;
 
 template <typename T> class SimpleList {
@@ -51,18 +51,31 @@ template <typename T> class Queue: public SimpleList<T> {
 
 };
 
-void readFile(string fileName) {
+string getFileName() {
+    string fileDir;
+    cout << "Please type file name: ";
+    getline(cin,fileDir);
+    return fileDir;
+}
+
+void writeToFile(string str, ofstream& file) {
+    file << str << "\n";
+}
+
+void readFile(string fileName, ofstream& outFile) {
     ifstream file;
-    string out;
+    string read;
     file.open(fileName);
-    while (getline(file, out)) {
-        cout << out;
+    while (getline(file, read)) {
+        writeToFile(read, outFile);
     }
     file.close();
 };
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    readFile("C:\\cygwin64\\home\\jsigm\\dsa2021spring\\ProgrammingAssignment1\\commands1.txt");
+    ofstream file;
+    file.open("output1.txt");
+    readFile(getFileName(), file);
+    file.close();
     return 0;
 }
