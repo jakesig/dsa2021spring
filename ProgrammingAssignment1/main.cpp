@@ -13,57 +13,59 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
 
 using namespace std;
+
+// Node class: Contains base structure for SimpleList
+
+template <typename T> class Node {
+
+    //Private variable declarations for Node
+
+    private:
+        T value;
+        Node* next;
+
+    //Public functions for Node
+
+    public:
+
+        //Node Constructor
+
+        Node(T value) : value(value) {}
+
+        //Getters and Setters
+
+        T getValue() const {
+            return value;
+        }
+
+        void setValue(T value) {
+            Node::value = value;
+        }
+
+        T *getNext() const {
+            return next;
+        }
+
+        void setNext(T *next) {
+            Node::next = next;
+        }
+
+};
 
 //SimpleList class: Base structure for Stack and Queue class later.
 
 template <typename T> class SimpleList {
 
-    //Nested Node class: To contain all elements inside SimpleList.
+    //Protected variable declarations for SimpleList.
 
-    class Node {
-
-        //Private variable declarations for Node
-
-        private:
-            T value;
-            Node* next;
-
-        //Public functions for Node
-
-        public:
-
-            //Node Constructor
-
-            Node(T value) : value(value) {}
-
-            //Getters and Setters
-
-            T getValue() const {
-                return value;
-            }
-
-            void setValue(T value) {
-                Node::value = value;
-            }
-
-            T *getNext() const {
-                return next;
-            }
-
-            void setNext(T *next) {
-                Node::next = next;
-            }
-
-    };
-
-    //Private variable declarations for SimpleList.
-
-    private:
+    protected:
         int length;
-        Node *first;
-        Node *last;
+        Node <T> *first;
+        Node <T> *last;
+        string name;
 
     //Public functions and function declarations for SimpleList.
 
@@ -71,8 +73,10 @@ template <typename T> class SimpleList {
 
         //SimpleList Constructor
 
-        SimpleList() {
+        SimpleList(const string &name) : name(name) {}
 
+        const string &getName() const {
+            return name;
         }
 
         int getLength() const {
@@ -83,19 +87,19 @@ template <typename T> class SimpleList {
             SimpleList::length = length;
         }
 
-        Node *getFirst() const {
+        Node<T> *getFirst() const {
             return first;
         }
 
-        void setFirst(Node *first) {
+        void setFirst(Node<T> *first) {
             SimpleList::first = first;
         }
 
-        Node *getLast() const {
+        Node<T> *getLast() const {
             return last;
         }
 
-        void setLast(Node *last) {
+        void setLast(Node<T> *last) {
             SimpleList::last = last;
         }
 
@@ -107,23 +111,43 @@ template <typename T> class SimpleList {
 
 template <typename T> class Stack: public SimpleList<T> {
 
-    void push(T item) {
-        Node current = this.getFirst();
-        setFirst(new Node(item));
-        setNext(current);
-    }
+    private: string name;
 
-    T pop() {
-        Node current = this.getFirst();
-        setFirst(current.getNext());
-        return current.getValue();
-    }
+    public:
+        Stack(const string &name) : name(name) {}
+
+        void push(T item) {
+            Node current = this.getFirst();
+            setFirst(new Node(item));
+            setNext(current);
+        }
+
+        T pop() {
+            Node current = this.getFirst();
+            setFirst(current.getNext());
+            return current.getValue();
+        }
 
 };
 
 template <typename T> class Queue: public SimpleList<T> {
 
+    private: string name;
 
+    public:
+        Queue(const string &name) : name(name) {}
+
+        void push(T item) {
+            Node current = this.getFirst();
+            setFirst(new Node(item));
+            setNext(current);
+        }
+
+        T pop() {
+            Node current = this.getFirst();
+            setFirst(current.getNext());
+            return current.getValue();
+        }
 };
 
 /** getFileName(): Returns file name that the user inputs.
@@ -144,7 +168,6 @@ string getFileName() {
  * @param {ofstream} file The output that is being written to.
  */
 
-
 void writeToFile(string str, ofstream& file) {
     file << str << "\n";
 }
@@ -158,12 +181,39 @@ void writeToFile(string str, ofstream& file) {
 void readFile(string fileName, ofstream& outFile) {
     ifstream file;
     string read;
+    string component;
+    string name;
+    int position;
+    int previousPosition;
+    list<string> nameList;
+    list<SimpleList<int> *> intList;
+    list<SimpleList<double> *> doubleList;
+    list<SimpleList<string> *> strList;
     file.open(fileName);
     while (getline(file, read)) {
         writeToFile(read, outFile);
+        position = read.find(' ');
+        component = read.substr(0, position);
+        if (component == "create") {
+
+        }
+        if (component=="push") {
+
+        }
+        if (component=="pop") {
+
+        }
     }
     file.close();
 };
+
+bool checkName(string name, list<string> names) {
+    for (string nameInList : names) {
+        if (nameInList==name)
+            return true;
+    }
+    return false;
+}
 
 int main() {
     ofstream file;
