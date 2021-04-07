@@ -59,12 +59,51 @@ template <typename T> class Node {
 
 template <typename T> class SimpleList {
 
+    // Private Node class: Contains base structure for SimpleList
+
+    private: class Node {
+
+        //Private variable declarations for Node
+
+        private:
+
+            T value;
+            Node* next;
+
+            //Public functions for Node
+
+        public:
+
+            //Node Constructor
+
+            Node(T value) : value(value) {}
+
+            //Getters and Setters
+
+            T getValue() const {
+                return value;
+            }
+
+            void setValue(T value) {
+                Node::value = value;
+            }
+
+            T *getNext() const {
+                return next;
+            }
+
+            void setNext(T *next) {
+                Node::next = next;
+            }
+
+    };
+
     //Protected variable declarations for SimpleList.
 
     protected:
         int length;
-        Node <T> *first;
-        Node <T> *last;
+        Node *first;
+        Node *last;
         string name;
 
     //Public functions and function declarations for SimpleList.
@@ -83,29 +122,25 @@ template <typename T> class SimpleList {
             return length;
         }
 
-        void setLength(int length) {
-            SimpleList::length = length;
-        }
-
-        Node<T> *getFirst() const {
+        Node *getFirst() const {
             return first;
         }
 
-        void setFirst(Node<T> *first) {
+        void setFirst(Node *first) {
             SimpleList::first = first;
         }
 
-        Node<T> *getLast() const {
+        Node *getLast() const {
             return last;
         }
 
-        void setLast(Node<T> *last) {
+        void setLast(Node *last) {
             SimpleList::last = last;
         }
 
         virtual void push(T item) = 0;
         virtual T pop() = 0;
-        virtual T peek() = 0;
+       //virtual T peek() = 0;
 
 };
 
@@ -138,15 +173,11 @@ template <typename T> class Queue: public SimpleList<T> {
         Queue(const string &name) : name(name) {}
 
         void push(T item) {
-            Node current = this.getFirst();
-            setFirst(new Node(item));
-            setNext(current);
+            //Write this
         }
 
         T pop() {
-            Node current = this.getFirst();
-            setFirst(current.getNext());
-            return current.getValue();
+            //Write this
         }
 };
 
@@ -184,7 +215,6 @@ void readFile(string fileName, ofstream& outFile) {
     string component;
     string name;
     int position;
-    int previousPosition;
     list<string> nameList;
     list<SimpleList<int> *> intList;
     list<SimpleList<double> *> doubleList;
@@ -194,13 +224,38 @@ void readFile(string fileName, ofstream& outFile) {
         writeToFile(read, outFile);
         position = read.find(' ');
         component = read.substr(0, position);
+        read = read.substr(position+1);
+        cout << component << '\n';
         if (component == "create") {
+            position = read.find(' ');
+            name = read.substr(0, position);
+            //cout << name << '\n';
+            read = read.substr(position+1);
+            position = read.find(' ');
+            component = read.substr(0, position);
+            //cout << component << '\n';
+            if (component == "stack") {
+                if (name.substr(0,1)=="i")
+                    intList.insert(new Stack<int>(name));
+                else if (name.substr(0,1)=="d")
+                    doubleList.insert(new Stack<double>(name));
+                else if (name.substr(0,1)=="s")
+                    strList.insert(new Stack<string>(name));
+            }
+
+            if (component == "queue") {
+                if (name.substr(0,1)=="i")
+                    intList.insert(new Queue<int>(name));
+                else if (name.substr(0,1)=="d")
+                    doubleList.insert(new Queue<double>(name));
+                else if (name.substr(0,1)=="s")
+                    strList.insert(new Queue<string>(name));
+            }
+        }
+        if (component == "push") {
 
         }
-        if (component=="push") {
-
-        }
-        if (component=="pop") {
+        if (component == "pop") {
 
         }
     }
@@ -218,7 +273,7 @@ bool checkName(string name, list<string> names) {
 int main() {
     ofstream file;
     file.open("output1.txt");
-    readFile(getFileName(), file);
+    readFile(/*getFileName()*/"commands1.txt", file);
     file.close();
     return 0;
 }
