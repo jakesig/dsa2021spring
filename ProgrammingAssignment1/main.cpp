@@ -110,10 +110,6 @@ template <typename T> class SimpleList {
 
     public:
 
-        //SimpleList Constructor
-
-        SimpleList(const string &name) : name(name) {}
-
         const string &getName() const {
             return name;
         }
@@ -146,38 +142,54 @@ template <typename T> class SimpleList {
 
 template <typename T> class Stack: public SimpleList<T> {
 
-    private: string name;
+    private:
+        int length;
+        string name;
 
     public:
+
         Stack(const string &name) : name(name) {}
 
         void push(T item) {
-            Node current = this.getFirst();
-            setFirst(new Node(item));
-            setNext(current);
+//            Node<T> current = this.getFirst();
+//            setFirst(new Node(item));
+//            setNext(current);
+            length++;
         }
 
         T pop() {
-            Node current = this.getFirst();
-            setFirst(current.getNext());
-            return current.getValue();
+//            Node<T> current = this.getFirst();
+//            setFirst(current.getNext());
+//            return current.getValue();
+            length--;
+            return 0;
         }
 
 };
 
 template <typename T> class Queue: public SimpleList<T> {
 
-    private: string name;
+    private:
+        int length;
+        string name;
 
     public:
+
         Queue(const string &name) : name(name) {}
 
         void push(T item) {
-            //Write this
+//            Node<T> current = this.getFirst();
+//            setFirst(new Node(item));
+//            setNext(current);
+            length++;
         }
 
         T pop() {
-            //Write this
+//            Node<T> current = this.getFirst();
+//            setFirst(current.getNext());
+//            return current.getValue();
+            length--;
+            return 0;
         }
 };
 
@@ -203,6 +215,22 @@ void writeToFile(string str, ofstream& file) {
     file << str << "\n";
 }
 
+template <typename T> SimpleList<T> findObj(string name, list<SimpleList<T>> list) {
+    for (SimpleList<T> l : list) {
+        if (l.getName()==name) {
+            return l;
+        }
+    }
+}
+
+bool checkName(string name, list<string> names) {
+    for (string nameInList : names) {
+        if (nameInList==name)
+            return true;
+    }
+    return false;
+}
+
 /**readFile(): Reads from input file and processes the commands inside of it.
  *
  * @param {string} fileName The name of the file to be read from.
@@ -221,14 +249,19 @@ void readFile(string fileName, ofstream& outFile) {
     list<SimpleList<string> *> strList;
     file.open(fileName);
     while (getline(file, read)) {
-        writeToFile(read, outFile);
+        writeToFile("PROCESSING COMMAND: "+read, outFile);
         position = read.find(' ');
         component = read.substr(0, position);
         read = read.substr(position+1);
-        cout << component << '\n';
+        position = read.find(' ');
+        name = read.substr(0, position);
+        //cout << component << '\n';
         if (component == "create") {
-            position = read.find(' ');
-            name = read.substr(0, position);
+            if (checkName(name, nameList)) {
+                writeToFile("ERROR: This name already exists!", outFile);
+                continue;
+            }
+            nameList.push_front(name);
             //cout << name << '\n';
             read = read.substr(position+1);
             position = read.find(' ');
@@ -236,39 +269,57 @@ void readFile(string fileName, ofstream& outFile) {
             //cout << component << '\n';
             if (component == "stack") {
                 if (name.substr(0,1)=="i")
-                    intList.insert(new Stack<int>(name));
+                    intList.push_front(new Stack<int>(name));
                 else if (name.substr(0,1)=="d")
-                    doubleList.insert(new Stack<double>(name));
+                    doubleList.push_front(new Stack<double>(name));
                 else if (name.substr(0,1)=="s")
-                    strList.insert(new Stack<string>(name));
+                    strList.push_front(new Stack<string>(name));
             }
 
             if (component == "queue") {
+                nameList.push_front(name);
                 if (name.substr(0,1)=="i")
-                    intList.insert(new Queue<int>(name));
+                    intList.push_front(new Queue<int>(name));
                 else if (name.substr(0,1)=="d")
-                    doubleList.insert(new Queue<double>(name));
+                    doubleList.push_front(new Queue<double>(name));
                 else if (name.substr(0,1)=="s")
-                    strList.insert(new Queue<string>(name));
+                    strList.push_front(new Queue<string>(name));
             }
         }
-        if (component == "push") {
 
+        if (component == "push") {
+            if (!checkName(name, nameList)) {
+                writeToFile("ERROR: This name does not exist!", outFile);
+                continue;
+            }
+
+            if (name.substr(0,1)=="i") {
+                for (SimpleList<int> *l : intList) {
+                    if (l.getName()==name) {
+                        SimpleList<int> found = l;
+                    }
+                }
+                //SimpleList<int> found = findObj<int>(name, intList);
+                found.push(1);
+            }
+            else if (name.substr(0,1)=="d") {
+                SimpleList<double> found = findObj<double>(name, doubleList);
+                found.push(1.0);
+            }
+            else if (name.substr(0,1)=="s") {
+                SimpleList<string> found = findObj<string>(name, strList);
+                found.push("1");
+            }
         }
         if (component == "pop") {
-
+            if (!checkName(name, nameList)) {
+                writeToFile("ERROR: This name does not exist!", outFile);
+                continue;
+            }
         }
     }
     file.close();
 };
-
-bool checkName(string name, list<string> names) {
-    for (string nameInList : names) {
-        if (nameInList==name)
-            return true;
-    }
-    return false;
-}
 
 int main() {
     ofstream file;
