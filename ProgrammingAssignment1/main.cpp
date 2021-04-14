@@ -17,42 +17,9 @@
 
 using namespace std;
 
-// Node class: Contains base structure for SimpleList
-
-template <typename T> class Node {
-
-    //Private variable declarations for Node
-
-    private:
-        T value;
-        Node* next;
-
-    //Public functions for Node
-
-    public:
-
-        //Node Constructor
-
-        Node(T value) : value(value) {}
-
-        //Getters and Setters
-
-        T getValue() const {
-            return value;
-        }
-
-        void setValue(T value) {
-            Node::value = value;
-        }
-
-        T *getNext() const {
-            return next;
-        }
-
-        void setNext(T *next) {
-            Node::next = next;
-        }
-
+template <typename T> struct Node {
+    T value;
+    struct Node<T>* next;
 };
 
 //SimpleList class: Base structure for Stack and Queue class later.
@@ -61,50 +28,11 @@ template <typename T> class SimpleList {
 
     // Private Node class: Contains base structure for SimpleList
 
-    private: class Node {
-
-        //Private variable declarations for Node
-
-        private:
-
-            T value;
-            Node* next;
-
-            //Public functions for Node
-
-        public:
-
-            //Node Constructor
-
-            Node(T value) : value(value) {}
-
-            //Getters and Setters
-
-            T getValue() const {
-                return value;
-            }
-
-            void setValue(T value) {
-                Node::value = value;
-            }
-
-            T *getNext() const {
-                return next;
-            }
-
-            void setNext(T *next) {
-                Node::next = next;
-            }
-
-    };
-
-    //Protected variable declarations for SimpleList.
-
     protected:
-        int length;
-        Node *first;
-        Node *last;
         string name;
+        int length;
+        struct Node<T>* first;
+        struct Node<T>* last;
 
     //Public functions and function declarations for SimpleList.
 
@@ -118,19 +46,19 @@ template <typename T> class SimpleList {
             return length;
         }
 
-        Node *getFirst() const {
+        Node<T> *getFirst() const {
             return first;
         }
 
-        void setFirst(Node *first) {
+        void setFirst(Node<T> *first) {
             SimpleList::first = first;
         }
 
-        Node *getLast() const {
+        Node<T> *getLast() const {
             return last;
         }
 
-        void setLast(Node *last) {
+        void setLast(Node<T> *last) {
             SimpleList::last = last;
         }
 
@@ -150,19 +78,24 @@ template <typename T> class Stack: public SimpleList<T> {
 
         Stack(const string &name) : name(name) {}
 
+        bool isEmpty() {
+            return length == 0;
+        }
+
         void push(T item) {
-//            Node<T> current = this.getFirst();
-//            setFirst(new Node(item));
-//            setNext(current);
+            Node<T>* insertion = new Node<T>();
+            insertion -> value = item;
+            insertion -> next = this -> getFirst();
+            this -> setFirst(insertion);
             length++;
         }
 
         T pop() {
-//            Node<T> current = this.getFirst();
-//            setFirst(current.getNext());
-//            return current.getValue();
+            Node<T>* extraction = this -> getFirst();
+            this -> setFirst(extraction -> next);
+            extraction -> next = NULL;
             length--;
-            return 0;
+            return extraction -> value;
         }
 
 };
@@ -213,14 +146,14 @@ string getFileName() {
 
 void writeToFile(string str, ofstream& file) {
     file << str << "\n";
+    cout << str << "\n";
 }
 
-template <typename T> SimpleList<T> findObj(string name, list<SimpleList<T>> list) {
-    for (SimpleList<T> l : list) {
-        if (l.getName()==name) {
-            return l;
-        }
+template <typename T> SimpleList<T>* findObj(string name, list<SimpleList<T> *> listOf) {
+    for (int i = 0; i < listOf.size(); i++) {
+
     }
+    return NULL;
 }
 
 bool checkName(string name, list<string> names) {
@@ -267,7 +200,7 @@ void readFile(string fileName, ofstream& outFile) {
             position = read.find(' ');
             component = read.substr(0, position);
             //cout << component << '\n';
-            if (component == "stack") {
+            if (component == "stack\r") {
                 if (name.substr(0,1)=="i")
                     intList.push_front(new Stack<int>(name));
                 else if (name.substr(0,1)=="d")
@@ -276,7 +209,7 @@ void readFile(string fileName, ofstream& outFile) {
                     strList.push_front(new Stack<string>(name));
             }
 
-            if (component == "queue") {
+            if (component == "queue\r") {
                 nameList.push_front(name);
                 if (name.substr(0,1)=="i")
                     intList.push_front(new Queue<int>(name));
@@ -288,27 +221,32 @@ void readFile(string fileName, ofstream& outFile) {
         }
 
         if (component == "push") {
+
+            read = read.substr(position+1);
+            position = read.find(' ');
+            component = read.substr(0, position);
+
             if (!checkName(name, nameList)) {
                 writeToFile("ERROR: This name does not exist!", outFile);
                 continue;
             }
 
             if (name.substr(0,1)=="i") {
-                for (SimpleList<int> *l : intList) {
-                    if (l.getName()==name) {
-                        SimpleList<int> found = l;
-                    }
-                }
-                //SimpleList<int> found = findObj<int>(name, intList);
-                found.push(1);
+                SimpleList<int>* list1 = findObj(name, intList);
+                list1 -> push(stoi(component));
+                continue;
             }
-            else if (name.substr(0,1)=="d") {
-                SimpleList<double> found = findObj<double>(name, doubleList);
-                found.push(1.0);
+
+            if (name.substr(0,1)=="d") {
+                SimpleList<double>* list2 = findObj(name, doubleList);
+                list2 -> push(stod(component));
+                continue;
             }
-            else if (name.substr(0,1)=="s") {
-                SimpleList<string> found = findObj<string>(name, strList);
-                found.push("1");
+
+            if (name.substr(0,1)=="s") {
+                SimpleList<string>* list3 = findObj(name, strList);
+                list3 -> push(component);
+                continue;
             }
         }
         if (component == "pop") {
@@ -319,12 +257,12 @@ void readFile(string fileName, ofstream& outFile) {
         }
     }
     file.close();
+    outFile.close();
 };
 
 int main() {
     ofstream file;
     file.open("output1.txt");
     readFile(/*getFileName()*/"commands1.txt", file);
-    file.close();
     return 0;
 }
