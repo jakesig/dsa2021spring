@@ -20,6 +20,9 @@ using namespace std;
 template <typename T> struct Node {
     T value;
     struct Node<T>* next;
+    Node (T item) {
+        value = item;
+    }
 };
 
 //SimpleList class: Base structure for Stack and Queue class later.
@@ -83,8 +86,7 @@ template <typename T> class Stack: public SimpleList<T> {
         }
 
         void push(T item) {
-            Node<T>* insertion = new Node<T>();
-            insertion -> value = item;
+            Node<T>* insertion = new Node<T>(item);
             insertion -> next = this -> getFirst();
             this -> setFirst(insertion);
             length++;
@@ -111,18 +113,27 @@ template <typename T> class Queue: public SimpleList<T> {
         Queue(const string &name) : name(name) {}
 
         void push(T item) {
-//            Node<T> current = this.getFirst();
-//            setFirst(new Node(item));
-//            setNext(current);
+            Node<T>* insertion = new Node<T>(item);
+
+            if (this -> last==NULL) {
+                this -> setFirst(insertion);
+                this -> setLast(insertion);
+                return;
+            }
+
+            //this -> last -> next = insertion;
+
             length++;
         }
 
         T pop() {
-//            Node<T> current = this.getFirst();
-//            setFirst(current.getNext());
-//            return current.getValue();
+            Node<T>* extraction = this -> getFirst();
+            this -> first = this -> first -> next;
+            if (this -> first == NULL) {
+                this -> last == NULL;
+            }
             length--;
-            return 0;
+            return extraction -> value;
         }
 };
 
@@ -150,14 +161,16 @@ void writeToFile(string str, ofstream& file) {
 }
 
 template <typename T> SimpleList<T>* findObj(string name, list<SimpleList<T> *> listOf) {
-    for (int i = 0; i < listOf.size(); i++) {
-
+    for (auto i : listOf) {
+        if (i -> getName() == name) {
+            return i;
+        }
     }
-    return NULL;
+    return listOf.front();
 }
 
 bool checkName(string name, list<string> names) {
-    for (string nameInList : names) {
+    for (string &nameInList : names) {
         if (nameInList==name)
             return true;
     }
@@ -220,16 +233,16 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
 
+        if (!checkName(name, nameList)) {
+            writeToFile("ERROR: This name does not exist!", outFile);
+            continue;
+        }
+
         if (component == "push") {
 
             read = read.substr(position+1);
             position = read.find(' ');
             component = read.substr(0, position);
-
-            if (!checkName(name, nameList)) {
-                writeToFile("ERROR: This name does not exist!", outFile);
-                continue;
-            }
 
             if (name.substr(0,1)=="i") {
                 SimpleList<int>* list1 = findObj(name, intList);
@@ -250,10 +263,7 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
         if (component == "pop") {
-            if (!checkName(name, nameList)) {
-                writeToFile("ERROR: This name does not exist!", outFile);
-                continue;
-            }
+
         }
     }
     file.close();
