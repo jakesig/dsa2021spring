@@ -179,7 +179,6 @@ void readFile(string fileName, ofstream& outFile) {
         component = read.substr(0, position);
         read = read.substr(position+1);
         position = read.find(' ');
-
         if (component == "create") {
             name = read.substr(0, position);
             if (checkName(name, intMap, doubleMap, strMap)) {
@@ -189,8 +188,8 @@ void readFile(string fileName, ofstream& outFile) {
             nameList.push_front(name);
             read = read.substr(position+1);
             position = read.find(' ');
-            component = read.substr(0, position);
-            if (component == "stack\r") {
+            component = read.substr(0, read.find('\n'));
+            if (component == "stack") {
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Stack<int>()));
                 else if (name.substr(0,1)=="d")
@@ -199,7 +198,7 @@ void readFile(string fileName, ofstream& outFile) {
                     strMap.insert(std::pair<string, SimpleList<string> *>(name, new Stack<string>()));
             }
 
-            if (component == "queue\r") {
+            if (component == "queue") {
                 nameList.push_front(name);
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Queue<int>()));
@@ -236,7 +235,7 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
         if (component == "pop") {
-            name = read.substr(0, read.find('\r'));
+            name = read.substr(0, read.find('\n'));
             if (!checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name does not exist!" << "\n";
                 continue;
