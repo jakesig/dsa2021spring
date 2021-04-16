@@ -13,7 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <list>
+//#include <list>
 #include <map>
 #include <sstream>
 
@@ -23,22 +23,37 @@ using namespace std;
 
 template <typename T> class SimpleList {
 
-    // Private Node class: Contains base structure for SimpleList
+    // Private Node struct: Contains base structure for SimpleList
+
     private:
         struct Node {
-            T value;
-            struct Node* next;
-            Node (T item, Node* next) {
-                value = item;
-                this -> next = next;
-            }
 
-            Node (T item) {
-                value = item;
-                this -> next = nullptr;
-            }
+           /** Public variables for SimpleList:
+            * value - Contains the value stored in the Node.
+            * next - Contains a pointer to another Node.
+            */
 
+            public:
+                T value;
+                struct Node* next;
+
+            public:
+                Node (T item, Node* next) {
+                    value = item;
+                    this -> next = next;
+                }
+
+                Node (T item) {
+                    value = item;
+                    this -> next = nullptr;
+                }
         };
+
+    /** Protected variables for SimpleList:
+     * length - Contains the length of the SimpleList.
+     * first - Contains a pointer to the first element of the SimpleList.
+     * last - Contains a pointer to the last element of the SimpleList.
+     */
 
     protected:
         int length;
@@ -49,33 +64,25 @@ template <typename T> class SimpleList {
 
     public:
 
+        //SimpleList constructor: Initializes protected variables above.
+
         SimpleList() {
+            length = 0;
             first = nullptr;
             last = nullptr;
-            length = 0;
         }
 
-        int getLength() const {
-            return length;
-        }
+        /** getFileName(): Returns file name that the user inputs.
+         *
+         * @return {string} The name of the file that the user inputted.
+         */
 
         bool isEmpty () {
             return length == 0;
         }
 
-        virtual void push(T item) = 0;
-        virtual T pop() = 0;
-
-        Node *getFirst() const {
-            return first;
-        }
-
-        void setFirst(Node *first) {
-            SimpleList::first = first;
-        }
-
         void insertStart(T newNode) {
-            if (length == 0) {
+            if (isEmpty()) {
                 last = first = new Node(newNode);
                 length++;
                 return;
@@ -86,7 +93,7 @@ template <typename T> class SimpleList {
         }
 
         void insertEnd(T newNode) {
-            if (length == 0) {
+            if (isEmpty()) {
                 last = first = new Node(newNode);
                 length++;
                 return;
@@ -98,7 +105,7 @@ template <typename T> class SimpleList {
         }
 
         T removeStart() {
-            if (length == 0) {
+            if (isEmpty()) {
                 return 0;
             }
             auto extraction = first;
@@ -113,6 +120,11 @@ template <typename T> class SimpleList {
             delete(extraction);
             return returnVal;
         }
+
+        //Abstract methods to be implemented in subclasses of SimpleList.
+
+        virtual void push(T item) = 0;
+        virtual T pop() = 0;
 
 };
 
@@ -180,7 +192,6 @@ void readFile(string fileName, ofstream& outFile) {
     string component3;
     string processed[3];
     int position;
-    list<string> nameList;
     map<string, SimpleList<int> *> intMap;
     map<string, SimpleList<double> *> doubleMap;
     map<string, SimpleList<string> *> strMap;
@@ -196,7 +207,6 @@ void readFile(string fileName, ofstream& outFile) {
                 outFile << "ERROR: This name already exists!" << "\n";
                 continue;
             }
-            nameList.push_front(name);
             if (component3 == "stack") {
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Stack<int>()));
@@ -205,9 +215,7 @@ void readFile(string fileName, ofstream& outFile) {
                 else if (name.substr(0,1)=="s")
                     strMap.insert(std::pair<string, SimpleList<string> *>(name, new Stack<string>()));
             }
-
             if (component3 == "queue") {
-                nameList.push_front(name);
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Queue<int>()));
                 else if (name.substr(0,1)=="d")
