@@ -54,9 +54,9 @@ PROCESSING COMMAND: push dHelloWorld 3.1415
 PROCESSING COMMAND: push dHelloPlanet -60.5
 PROCESSING COMMAND: push dHelloWorld -1
 PROCESSING COMMAND: pop dHelloWorld
-Value popped: -1.000
+Value popped: -1
 PROCESSING COMMAND: pop dHelloPlanet
-Value popped: -60.50
+Value popped: -60.5
 PROCESSING COMMAND: pop sR2D2
 ERROR: This name does not exist!
 PROCESSING COMMAND: create sR2D2 queue
@@ -73,6 +73,6 @@ ERROR: This list is empty!
 PROCESSING COMMAND: pop dHelloWorld
 Value popped: 3.1415
 PROCESSING COMMAND: pop dHelloWorld
-Value popped: 3.1400
+Value popped: 3.14
 PROCESSING COMMAND: pop dHelloWorld
 ERROR: This list is empty!
