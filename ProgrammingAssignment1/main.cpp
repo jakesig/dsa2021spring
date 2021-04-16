@@ -77,39 +77,23 @@ template <typename T> class SimpleList {
             if (length == 0) {
                 last = first = new Node(newNode);
                 length++;
-//                cout << "Inserting at start..." << "\n";
-//                cout << "First Pointer: " << first -> value << "\n";
-//                cout << "Last Pointer: " << last -> value << "\n";
-//                cout << "---------------------------" << "\n";
                 return;
             }
             auto insertion = new Node(newNode, first);
             first = insertion;
             length++;
-//            cout << "Inserting at start..." << "\n";
-//            cout << "First Pointer: " << first -> value << "\n";
-//            cout << "Last Pointer: " << last -> value << "\n";
-//            cout << "---------------------------" << "\n";
         }
 
         void insertEnd(T newNode) {
             if (length == 0) {
                 last = first = new Node(newNode);
                 length++;
-//                cout << "Inserting at end..." << "\n";
-//                cout << "First Pointer: " << first -> value << "\n";
-//                cout << "Last Pointer: " << last -> value << "\n";
-//                cout << "---------------------------" << "\n";
                 return;
             }
             auto insertion = new Node(newNode);
             last -> next = insertion;
             last = insertion;
             length++;
-//            cout << "Inserting at end..." << "\n";
-//            cout << "First Pointer: " << first -> value << "\n";
-//            cout << "Last Pointer: " << last -> value << "\n";
-//            cout << "---------------------------" << "\n";
         }
 
         T removeStart() {
@@ -120,17 +104,9 @@ template <typename T> class SimpleList {
             T returnVal = extraction -> value;
             if (length == 1) {
                 first = last = nullptr;
-//                cout << "Removed " << returnVal << " from start..." << "\n";
-//                cout << "Size: " << length << "\n";
-//                cout << "---------------------------" << "\n";
             }
             else {
                 first = first->next;
-//                cout << "Removed " << returnVal << " from start..." << "\n";
-//                cout << "First Pointer: " << first->value << "\n";
-//                cout << "Last Pointer: " << last->value << "\n";
-//                cout << "Size: " << length << "\n";
-//                cout << "---------------------------" << "\n";
             }
             length--;
             delete(extraction);
@@ -252,8 +228,6 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
 
-
-
         if (component == "push") {
             name = read.substr(0, position);
             if (!checkName(name, nameList)) {
@@ -316,6 +290,8 @@ void readFile(string fileName, ofstream& outFile) {
     file.close();
     outFile.close();
 };
+
+
 
 int main() {
     ofstream file;
