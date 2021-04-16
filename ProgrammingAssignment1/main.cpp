@@ -58,7 +58,12 @@ template <typename T> class SimpleList {
             return length;
         }
 
-    protected:
+        bool isEmpty () {
+            return length == 0;
+        }
+
+        virtual void push(T item) = 0;
+        virtual T pop() = 0;
 
         Node *getFirst() const {
             return first;
@@ -72,74 +77,65 @@ template <typename T> class SimpleList {
             if (length == 0) {
                 last = first = new Node(newNode);
                 length++;
-                cout << "Inserting at start..." << "\n";
-                cout << "First Pointer: " << first -> value << "\n";
-                cout << "Last Pointer: " << last -> value << "\n";
-                cout << "---------------------------" << "\n";
+//                cout << "Inserting at start..." << "\n";
+//                cout << "First Pointer: " << first -> value << "\n";
+//                cout << "Last Pointer: " << last -> value << "\n";
+//                cout << "---------------------------" << "\n";
                 return;
             }
             auto insertion = new Node(newNode, first);
             first = insertion;
             length++;
-            cout << "Inserting at start..." << "\n";
-            cout << "First Pointer: " << first -> value << "\n";
-            cout << "Last Pointer: " << last -> value << "\n";
-            cout << "---------------------------" << "\n";
+//            cout << "Inserting at start..." << "\n";
+//            cout << "First Pointer: " << first -> value << "\n";
+//            cout << "Last Pointer: " << last -> value << "\n";
+//            cout << "---------------------------" << "\n";
         }
 
         void insertEnd(T newNode) {
             if (length == 0) {
                 last = first = new Node(newNode);
                 length++;
-                cout << "Inserting at start..." << "\n";
-                cout << "First Pointer: " << first -> value << "\n";
-                cout << "Last Pointer: " << last -> value << "\n";
-                cout << "---------------------------" << "\n";
+//                cout << "Inserting at end..." << "\n";
+//                cout << "First Pointer: " << first -> value << "\n";
+//                cout << "Last Pointer: " << last -> value << "\n";
+//                cout << "---------------------------" << "\n";
                 return;
             }
             auto insertion = new Node(newNode);
             last -> next = insertion;
             last = insertion;
             length++;
-            cout << "Inserting at end..." << "\n";
-            cout << "First Pointer: " << first -> value << "\n";
-            cout << "Last Pointer: " << last -> value << "\n";
-            cout << "---------------------------" << "\n";
+//            cout << "Inserting at end..." << "\n";
+//            cout << "First Pointer: " << first -> value << "\n";
+//            cout << "Last Pointer: " << last -> value << "\n";
+//            cout << "---------------------------" << "\n";
         }
 
         T removeStart() {
             if (length == 0) {
-                cout << "dumdum" << "\n";
-                return NULL;
+                return 0;
             }
             auto extraction = first;
             T returnVal = extraction -> value;
             if (length == 1) {
                 first = last = nullptr;
-                cout << "Removed " << returnVal << " from start..." << "\n";
-                cout << "Size: " << length << "\n";
-                cout << "---------------------------" << "\n";
+//                cout << "Removed " << returnVal << " from start..." << "\n";
+//                cout << "Size: " << length << "\n";
+//                cout << "---------------------------" << "\n";
             }
             else {
-
                 first = first->next;
-                cout << "Removed " << returnVal << " from start..." << "\n";
-                cout << "First Pointer: " << first->value << "\n";
-                cout << "Last Pointer: " << last->value << "\n";
-                cout << "Size: " << length << "\n";
-                cout << "---------------------------" << "\n";
+//                cout << "Removed " << returnVal << " from start..." << "\n";
+//                cout << "First Pointer: " << first->value << "\n";
+//                cout << "Last Pointer: " << last->value << "\n";
+//                cout << "Size: " << length << "\n";
+//                cout << "---------------------------" << "\n";
             }
             length--;
             delete(extraction);
             return returnVal;
         }
-
-        bool isEmpty () {
-            return length == 0;
-        }
-
-        virtual void push(T item) = 0;
-        virtual T pop() = 0;
 
 };
 
@@ -158,12 +154,7 @@ template <typename T> class Stack: public SimpleList<T> {
 
 template <typename T> class Queue: public SimpleList<T> {
 
-    private:
-        int length;
-        string name;
-
     public:
-
         void push(T item) {
             this -> insertEnd(item);
         }
@@ -227,10 +218,10 @@ void readFile(string fileName, ofstream& outFile) {
         component = read.substr(0, position);
         read = read.substr(position+1);
         position = read.find(' ');
-        name = read.substr(0, position);
         //cout << component << '\n';
 
         if (component == "create") {
+            name = read.substr(0, position);
             if (checkName(name, nameList)) {
                 writeToFile("ERROR: This name already exists!", outFile);
                 continue;
@@ -261,37 +252,65 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
 
-        if (!checkName(name, nameList)) {
-            writeToFile("ERROR: This name does not exist!", outFile);
-            continue;
-        }
+
 
         if (component == "push") {
-
+            name = read.substr(0, position);
+            if (!checkName(name, nameList)) {
+                writeToFile("ERROR: This name does not exist!", outFile);
+                continue;
+            }
             read = read.substr(position+1);
             position = read.find(' ');
             component = read.substr(0, position);
 
             if (name.substr(0,1)=="i") {
-//                SimpleList<int>* list1 = findObj(name, intList);
-//                list1 -> push(stoi(component));
-//                continue;
+                intMap[name] -> push(stoi(component));
+                continue;
             }
 
             if (name.substr(0,1)=="d") {
-//                SimpleList<double>* list2 = findObj(name, doubleList);
-//                list2 -> push(stod(component));
-//                continue;
+                doubleMap[name] -> push(stod(component));
+                continue;
             }
 
             if (name.substr(0,1)=="s") {
-//                SimpleList<string>* list3 = findObj(name, strList);
-//                list3 -> push(component);
-//                continue;
+                strMap[name] -> push(component);
+                continue;
             }
         }
         if (component == "pop") {
+            name = read.substr(0, read.find('\r'));
+            if (!checkName(name, nameList)) {
+                writeToFile("ERROR: This name does not exist!", outFile);
+                continue;
+            }
+            if (name.substr(0,1)=="i") {
+                if (intMap[name]-> isEmpty()) {
+                    writeToFile("ERROR: This list is empty!", outFile);
+                    continue;
+                }
+                writeToFile("Value popped: " + to_string(intMap[name] -> pop()), outFile);
+                continue;
+            }
 
+            if (name.substr(0,1)=="d") {
+                if(doubleMap[name] -> isEmpty()) {
+                    writeToFile("ERROR: This list is empty!", outFile);
+                    continue;
+                }
+                writeToFile("Value popped: " + to_string(doubleMap[name] -> pop()).substr(0,6), outFile);
+                continue;
+            }
+
+            if (name.substr(0,1)=="s") {
+                if(strMap[name] -> isEmpty()) {
+                    writeToFile("ERROR: This list is empty!", outFile);
+                    continue;
+                }
+                writeToFile("Value popped: " + (strMap[name] -> pop()), outFile);
+                continue;
+            }
         }
     }
     file.close();
@@ -302,6 +321,5 @@ int main() {
     ofstream file;
     file.open("output1.txt");
     readFile(/*getFileName()*/"commands1.txt", file);
-
     return 0;
 }
