@@ -15,6 +15,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -152,6 +153,15 @@ string getFileName() {
     return fileDir;
 }
 
+void split(string str, string output[]) {
+    stringstream stream(str);
+    stream >> output[0];
+    stream >> output[1];
+    if (output[0] == "pop")
+        return;
+    stream >> output[2];
+}
+
 bool checkName(string key, map<string, SimpleList<int> *> intMap, map<string, SimpleList<double> *> doubleMap, map<string, SimpleList<string> *> strMap) {
     return (intMap.find(key)!=intMap.end()) || (doubleMap.find(key)!=doubleMap.end()) || (strMap.find(key)!=strMap.end());
 }
@@ -165,8 +175,10 @@ bool checkName(string key, map<string, SimpleList<int> *> intMap, map<string, Si
 void readFile(string fileName, ofstream& outFile) {
     ifstream file;
     string read;
-    string component;
+    string component1;
     string name;
+    string component3;
+    string processed[3];
     int position;
     list<string> nameList;
     map<string, SimpleList<int> *> intMap;
@@ -175,21 +187,17 @@ void readFile(string fileName, ofstream& outFile) {
     file.open(fileName);
     while (getline(file, read)) {
         outFile <<"PROCESSING COMMAND: " << read << "\n";
-        position = read.find(' ');
-        component = read.substr(0, position);
-        read = read.substr(position+1);
-        position = read.find(' ');
-        if (component == "create") {
-            name = read.substr(0, position);
+        split(read, processed);
+        component1 = processed[0];
+        name = processed[1];
+        component3 = processed[2];
+        if (component1 == "create") {
             if (checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name already exists!" << "\n";
                 continue;
             }
             nameList.push_front(name);
-            read = read.substr(position+1);
-            position = read.find(' ');
-            component = read.substr(0, read.find('\n'));
-            if (component == "stack") {
+            if (component3 == "stack") {
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Stack<int>()));
                 else if (name.substr(0,1)=="d")
@@ -198,7 +206,7 @@ void readFile(string fileName, ofstream& outFile) {
                     strMap.insert(std::pair<string, SimpleList<string> *>(name, new Stack<string>()));
             }
 
-            if (component == "queue") {
+            if (component3 == "queue") {
                 nameList.push_front(name);
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Queue<int>()));
@@ -209,33 +217,28 @@ void readFile(string fileName, ofstream& outFile) {
             }
         }
 
-        if (component == "push") {
-            name = read.substr(0, position);
+        if (component1 == "push") {
             if (!checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name does not exist!" << "\n";
                 continue;
             }
-            read = read.substr(position+1);
-            position = read.find(' ');
-            component = read.substr(0, position);
 
             if (name.substr(0,1)=="i") {
-                intMap[name] -> push(stoi(component));
+                intMap[name] -> push(stoi(component3));
                 continue;
             }
 
             if (name.substr(0,1)=="d") {
-                doubleMap[name] -> push(stod(component));
+                doubleMap[name] -> push(stod(component3));
                 continue;
             }
 
             if (name.substr(0,1)=="s") {
-                strMap[name] -> push(component);
+                strMap[name] -> push(component3);
                 continue;
             }
         }
-        if (component == "pop") {
-            name = read.substr(0, read.find('\n'));
+        if (component1 == "pop") {
             if (!checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name does not exist!" << "\n";
                 continue;
