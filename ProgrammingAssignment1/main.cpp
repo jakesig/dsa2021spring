@@ -152,23 +152,8 @@ string getFileName() {
     return fileDir;
 }
 
-/** writeToFile(): A one-line function that writes to the output file opened in main.
- *
- * @param {string} str The string to write to the file.
- * @param {ofstream} file The output that is being written to.
- */
-
-void writeToFile(string str, ofstream& file) {
-    file << str << "\n";
-    cout << str << "\n";
-}
-
-bool checkName(string name, list<string> names) {
-    for (string &nameInList : names) {
-        if (nameInList==name)
-            return true;
-    }
-    return false;
+bool checkName(string key, map<string, SimpleList<int> *> intMap, map<string, SimpleList<double> *> doubleMap, map<string, SimpleList<string> *> strMap) {
+    return (intMap.find(key)!=intMap.end()) || (doubleMap.find(key)!=doubleMap.end()) || (strMap.find(key)!=strMap.end());
 }
 
 /**readFile(): Reads from input file and processes the commands inside of it.
@@ -189,25 +174,22 @@ void readFile(string fileName, ofstream& outFile) {
     map<string, SimpleList<string> *> strMap;
     file.open(fileName);
     while (getline(file, read)) {
-        writeToFile("PROCESSING COMMAND: "+read, outFile);
+        outFile <<"PROCESSING COMMAND: " << read << "\n";
         position = read.find(' ');
         component = read.substr(0, position);
         read = read.substr(position+1);
         position = read.find(' ');
-        //cout << component << '\n';
 
         if (component == "create") {
             name = read.substr(0, position);
-            if (checkName(name, nameList)) {
-                writeToFile("ERROR: This name already exists!", outFile);
+            if (checkName(name, intMap, doubleMap, strMap)) {
+                outFile << "ERROR: This name already exists!" << "\n";
                 continue;
             }
             nameList.push_front(name);
-            //cout << name << '\n';
             read = read.substr(position+1);
             position = read.find(' ');
             component = read.substr(0, position);
-            //cout << component << '\n';
             if (component == "stack\r") {
                 if (name.substr(0,1)=="i")
                     intMap.insert(std::pair<string, SimpleList<int> *>(name, new Stack<int>()));
@@ -230,8 +212,8 @@ void readFile(string fileName, ofstream& outFile) {
 
         if (component == "push") {
             name = read.substr(0, position);
-            if (!checkName(name, nameList)) {
-                writeToFile("ERROR: This name does not exist!", outFile);
+            if (!checkName(name, intMap, doubleMap, strMap)) {
+                outFile << "ERROR: This name does not exist!" << "\n";
                 continue;
             }
             read = read.substr(position+1);
@@ -255,34 +237,34 @@ void readFile(string fileName, ofstream& outFile) {
         }
         if (component == "pop") {
             name = read.substr(0, read.find('\r'));
-            if (!checkName(name, nameList)) {
-                writeToFile("ERROR: This name does not exist!", outFile);
+            if (!checkName(name, intMap, doubleMap, strMap)) {
+                outFile << "ERROR: This name does not exist!" << "\n";
                 continue;
             }
             if (name.substr(0,1)=="i") {
                 if (intMap[name]-> isEmpty()) {
-                    writeToFile("ERROR: This list is empty!", outFile);
+                    outFile << "ERROR: This list is empty!" << "\n";
                     continue;
                 }
-                writeToFile("Value popped: " + to_string(intMap[name] -> pop()), outFile);
+                outFile << "Value popped: " << intMap[name] -> pop() << "\n";
                 continue;
             }
 
             if (name.substr(0,1)=="d") {
                 if(doubleMap[name] -> isEmpty()) {
-                    writeToFile("ERROR: This list is empty!", outFile);
+                    outFile << "ERROR: This list is empty!" << "\n";
                     continue;
                 }
-                writeToFile("Value popped: " + to_string(doubleMap[name] -> pop()).substr(0,6), outFile);
+                outFile << "Value popped: " << doubleMap[name] -> pop() << "\n";
                 continue;
             }
 
             if (name.substr(0,1)=="s") {
                 if(strMap[name] -> isEmpty()) {
-                    writeToFile("ERROR: This list is empty!", outFile);
+                    outFile << "ERROR: This list is empty!" << "\n";
                     continue;
                 }
-                writeToFile("Value popped: " + (strMap[name] -> pop()), outFile);
+                outFile << "Value popped: " << strMap[name] -> pop() << "\n";
                 continue;
             }
         }
