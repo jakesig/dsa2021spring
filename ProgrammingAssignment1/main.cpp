@@ -9,11 +9,11 @@
  */
 
 /** Library initializations:
- *  iostream for reading file names.
- *  fstream for reading files.
- *  string for getting lines from files.
- *  map for holding the Stacks and Queues.
- *  sstream for processing the lines of the input file.
+ *  iostream - Reading file names.
+ *  fstream - Reading files.
+ *  string - Getting lines from files.
+ *  map - Holding the Stacks and Queues.
+ *  sstream - For processing the lines of the input file.
  */
 
 #include <iostream>
@@ -31,7 +31,7 @@ using namespace std;
 
 template <typename T> class SimpleList {
 
-    /** Private Node struct: Contains base structure for SimpleList
+    /** Private Node struct: Contains base structure for SimpleList.
      */
 
     private:
@@ -43,6 +43,7 @@ template <typename T> class SimpleList {
              */
 
             public:
+
                 T value;
                 struct Node* next;
 
@@ -68,6 +69,7 @@ template <typename T> class SimpleList {
                     value = item;
                     this -> next = nullptr;
                 }
+
         };
 
     /** Protected variables for SimpleList:
@@ -129,6 +131,7 @@ template <typename T> class SimpleList {
             auto insertion = new Node(newNode, first);
             first = insertion;
             length++;
+
         }
 
         /** insertEnd(): Inserts Node at the end of a SimpleList.
@@ -159,6 +162,7 @@ template <typename T> class SimpleList {
             last -> next = insertion;
             last = insertion;
             length++;
+
         }
 
         /** removeStart(): Removes Node from the start of a SimpleList
@@ -204,6 +208,7 @@ template <typename T> class SimpleList {
             delete(extraction);
             length--;
             return returnVal;
+
         }
 
         /** Abstract methods to be implemented in subclasses of SimpleList.
@@ -367,18 +372,10 @@ void readFile(ifstream& inFile, ofstream& outFile) {
 
         if (component1 == "create") {
 
-            /** Check if the name stored already exists and if it does, output
-             *  to the file, and move along to process the next line.
-             */
-
             if (checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name already exists!" << "\n";
                 continue;
             }
-
-            /** If the value stored in component3 is "stack", create a new stack based on its type,
-             *  using a switch-case statement.
-             */
 
             if (component3 == "stack") {
                 switch (type) {
@@ -396,10 +393,6 @@ void readFile(ifstream& inFile, ofstream& outFile) {
                 }
             }
 
-            /** If the value stored in component3 is "queue", create a new queue based on its type,
-             *  using a switch-case statement.
-             */
-
             if (component3 == "queue") {
                 switch (type) {
                     case 'i':
@@ -412,6 +405,7 @@ void readFile(ifstream& inFile, ofstream& outFile) {
                         break;
                 }
             }
+
         }
 
         /** Second condition: If the value stored in component1 is "push",
@@ -420,10 +414,6 @@ void readFile(ifstream& inFile, ofstream& outFile) {
          */
 
         if (component1 == "push") {
-
-            /** Check if the name stored already exists and if it does not, output
-             *  to the file, and move along to process the next line.
-             */
 
             if (!checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name does not exist!" << "\n";
@@ -443,6 +433,7 @@ void readFile(ifstream& inFile, ofstream& outFile) {
                 default:
                     break;
             }
+
         }
 
         /** Third condition: If the value stored in component1 is "pop",
@@ -452,10 +443,6 @@ void readFile(ifstream& inFile, ofstream& outFile) {
          */
 
         if (component1 == "pop") {
-
-            /** Check if the name stored already exists and if it does not, output
-             *  to the file, and move along to process the next line.
-             */
 
             if (!checkName(name, intMap, doubleMap, strMap)) {
                 outFile << "ERROR: This name does not exist!" << "\n";
@@ -487,26 +474,15 @@ void readFile(ifstream& inFile, ofstream& outFile) {
                 default:
                     break;
             }
+
         }
     }
-
-    /** Close both the output and input file.
-     */
 
     inFile.close();
     outFile.close();
 };
 
-/** main() method.
- *
- *  @return 0
- */
-
 int main() {
-
-    /** Create and open both an output file and input file,
-     *  prompting the user for names of both using getFileName().
-     */
 
     ofstream outFile;
     ifstream inFile;
@@ -520,9 +496,6 @@ int main() {
      */
 
     readFile(inFile, outFile);
-
-    /** Return 0.
-     */
 
     return 0;
 }
