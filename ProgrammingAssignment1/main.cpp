@@ -1,13 +1,15 @@
-/**Jacob Sigman
- * Programming Assignment 1
- * Professor Sable
- * main.cpp
+/** Jacob Sigman
+ *  Programming Assignment 1
+ *  Professor Sable
+ *  main.cpp
  */
 
-/**Library initializations:
- * iostream for reading file names.
- * fstream for reading files.
- * string for getting lines from files.
+/** Library initializations:
+ *  iostream for reading file names.
+ *  fstream for reading files.
+ *  string for getting lines from files.
+ *  map for holding the Stacks and Queues.
+ *  sstream for processing the lines of the input file.
  */
 
 #include <iostream>
@@ -18,11 +20,13 @@
 
 using namespace std;
 
-//SimpleList class: Base structure for Stack and Queue class later.
+/** SimpleList class: Base structure for Stack and Queue class later.
+ */
 
 template <typename T> class SimpleList {
 
-    // Private Node struct: Contains base structure for SimpleList
+    /** Private Node struct: Contains base structure for SimpleList
+     */
 
     private:
         struct Node {
@@ -72,7 +76,6 @@ template <typename T> class SimpleList {
         int length;
         struct Node* first;
         struct Node* last;
-        string name;
 
     public:
 
@@ -101,11 +104,23 @@ template <typename T> class SimpleList {
          */
 
         void insertStart(T newNode) {
+
+            /** Base case: If the list is empty, set the first and
+             *  last pointer equivalent to the node inputted.
+             */
+
             if (isEmpty()) {
                 last = first = new Node(newNode);
                 length++;
                 return;
             }
+
+            /** Perform the insertion of the first node at the start
+             *  by making a new node with the next pointer pointing to
+             *  the first node, and the first pointer pointing to the
+             *  new node.
+             */
+
             auto insertion = new Node(newNode, first);
             first = insertion;
             length++;
@@ -117,11 +132,23 @@ template <typename T> class SimpleList {
          */
 
         void insertEnd(T newNode) {
+
+            /** Base case: If the list is empty, set the first and
+             *  last pointer equivalent to the node inputted.
+             */
+
             if (isEmpty()) {
                 last = first = new Node(newNode);
                 length++;
                 return;
             }
+
+            /** Perform the insertion of the last node at the end
+             *  by reassigning the existing last node's next pointer
+             *  to a new node and replacing the existing last pointer
+             *  with the new node.
+             */
+
             auto insertion = new Node(newNode);
             last -> next = insertion;
             last = insertion;
@@ -134,14 +161,30 @@ template <typename T> class SimpleList {
          */
 
         T removeStart() {
+
+            /** Case 1: If the SimpleList is empty, return 0.
+             */
+
             if (isEmpty()) {
                 return 0;
             }
+
+            /** Create a value holding the value in the first pointer.
+             */
+
             auto extraction = first;
             T returnVal = extraction -> value;
+
+            /** Case 2: If the SimpleList has one item, set the first
+             *  and last pointer to null.
+             */
+
             if (length == 1) {
                 first = last = nullptr;
             }
+
+
+
             else {
                 first = first->next;
             }
@@ -150,7 +193,8 @@ template <typename T> class SimpleList {
             return returnVal;
         }
 
-        //Abstract methods to be implemented in subclasses of SimpleList.
+        /** Abstract methods to be implemented in subclasses of SimpleList.
+         */
 
         virtual void push(T item) = 0;
         virtual T pop() = 0;
