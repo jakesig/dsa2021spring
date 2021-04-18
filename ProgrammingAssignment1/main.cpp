@@ -27,10 +27,10 @@ template <typename T> class SimpleList {
     private:
         struct Node {
 
-           /** Public variables for SimpleList:
-            *  value - Contains the value stored in the Node.
-            *  next - Contains a pointer to another Node.
-            */
+            /** Public variables for SimpleList:
+             *  value - Contains the value stored in the Node.
+             *  next - Contains a pointer to another Node.
+             */
 
             public:
                 T value;
@@ -215,7 +215,7 @@ template <typename T> class Queue: public SimpleList<T> {
 
 string getFileName() {
     string fileDir;
-    cout << "Please type file name: ";
+    cout << " file name: ";
     getline(cin,fileDir);
     return fileDir;
 }
@@ -363,7 +363,9 @@ void readFile(string fileName, ofstream& outFile) {
 
 int main() {
     ofstream file;
-    file.open("output1.txt");
+    cout << "Output";
+    file.open(getFileName());
+    cout << "Input";
     readFile(getFileName(), file);
     return 0;
 }
