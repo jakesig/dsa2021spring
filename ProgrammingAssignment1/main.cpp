@@ -2,6 +2,10 @@
  *  Programming Assignment 1
  *  Professor Sable
  *  main.cpp
+ *
+ *  This code implements a Stack and a Queue using a linked list, then
+ *  reads from a list of commands, performing manipulations on Stacks and Queues,
+ *  and outputting the results to an output file.
  */
 
 /** Library initializations:
