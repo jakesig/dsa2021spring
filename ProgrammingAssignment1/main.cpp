@@ -25,6 +25,8 @@
 using namespace std;
 
 /** SimpleList class: Base structure for Stack and Queue class later.
+ *
+ *  @tparam T
  */
 
 template <typename T> class SimpleList {
@@ -43,8 +45,6 @@ template <typename T> class SimpleList {
             public:
                 T value;
                 struct Node* next;
-
-            public:
 
                 /** Node(): Initializes a node with value item
                  *  and next node next.
@@ -499,7 +499,7 @@ void readFile(ifstream& inFile, ofstream& outFile) {
 
 /** main() method.
  *
- * @return 0
+ *  @return 0
  */
 
 int main() {
