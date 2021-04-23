@@ -122,8 +122,24 @@ bool comparator(const Data* person1, const Data* person2) {
     return true;
 }
 
+void merge(list<Data *> &l, int start, int finish) {
+
+}
+
+void mergeSort(list<Data *> &l, Data* start, Data* end) {
+    if (l.size() <=1)
+        return;
+    string startData = (start) -> ssn;
+    string endData = (end) -> ssn;
+    int startVal = stoi(startData.substr(0,3)+startData.substr(4,2)+startData.substr(7,3));
+    int endVal = stoi(endData.substr(0,3)+endData.substr(4,2)+endData.substr(7,3));
+    int pivot = (startVal+endVal)/2;
+
+    mergeSort(l, start, pivot);
+    mergeSort(l, pivot+1, end);
+}
+
 void sortDataList(list<Data *> &l) {
-    Data arr[30] = {};
     // Fill this in
     for (auto it = l.begin(); it != l.end(); ++it) {
         firstMap[(*it) -> firstName].push_back(*it);
