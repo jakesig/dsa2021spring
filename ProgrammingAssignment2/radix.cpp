@@ -130,19 +130,66 @@ bool comparator(const Data* person1, const Data* person2) {
 void sortBySSN(list<Data *> l) {
 
     auto listIt = l.begin();
+    string mapVal;
 
     for (auto it = l.begin(); it != l.end(); ++it) {
         ssnMap3[(*it) -> ssn.substr(7,3)].push_back(*it);
     }
 
+//    for (int i = 0; i < 1000; ++i) {
+//        if (i<10)
+//            mapVal = "00"+to_string(i);
+//        if (i>=10 && i<100)
+//            mapVal = "0"+to_string(i);
+//        else
+//            mapVal=to_string(i);
+//        auto pointer = ssnMap3[mapVal];
+//        for (auto it = pointer.begin(); it != pointer.end(); ++it) {
+//            string thisSSN = (*it) -> ssn.substr(4,2) + (*it) -> ssn.substr(6,1);
+//            ssnMap2[thisSSN].push_back(*it);
+//        }
+//    }
+//
+//    for (int i = 0; i < 1000; ++i) {
+//        if (i<10)
+//            mapVal = "00"+to_string(i);
+//        if (i>=10 && i<100)
+//            mapVal = "0"+to_string(i);
+//        else
+//            mapVal=to_string(i);
+//        auto pointer = ssnMap2[mapVal];
+//        for (auto it = pointer.begin(); it != pointer.end(); ++it) {
+//            ssnMap1[(*it) -> ssn.substr(0,3)].push_back(*it);
+//        }
+//    }
+//
+//    for (int i = 0; i < 1000; ++i) {
+//        if (i<10)
+//            mapVal = "00"+to_string(i);
+//        if (i>=10 && i<100)
+//            mapVal = "0"+to_string(i);
+//        else
+//            mapVal=to_string(i);
+//        auto pointer = ssnMap1[mapVal];
+//        for (auto it = pointer.begin(); it != pointer.end(); ++it) {
+//            *listIt = *it;
+//            ++listIt;
+//        }
+//    }
+//
     for (int i = 0; i < 1000; ++i) {
-        auto pointer = ssnMap3[to_string(i)];
+        if (i<10)
+            mapVal = "00"+to_string(i);
+        if (i>=10 && i<100)
+            mapVal = "0"+to_string(i);
+        else
+            mapVal=to_string(i);
+        auto pointer = ssnMap3[mapVal];
         for (auto it = pointer.begin(); it != pointer.end(); ++it) {
-            string thisSSN = (*it) -> ssn.substr(4,2) + (*it) -> ssn.substr(6,1);
-            ssnMap2[thisSSN].push_back(*it);
+            *listIt = *it;
+            ++listIt;
         }
     }
-
 }
 
 void sortDataList(list<Data *> &l) {
