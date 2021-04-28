@@ -126,6 +126,10 @@ bool comparator(const Data* person1, const Data* person2) {
         return true;
 }
 
+bool ssn_comparator(const Data* person1, const Data* person2) {
+    return !(person1 -> ssn >= person2 -> ssn);
+}
+
 void sortDataList(list<Data *> &l) {
     // Fill this in
     l.sort(comparator);

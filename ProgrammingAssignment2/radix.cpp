@@ -180,7 +180,7 @@ void sortBySSN(list<Data *> l) {
     for (int i = 0; i < 1000; ++i) {
         if (i<10)
             mapVal = "00"+to_string(i);
-        if (i>=10 && i<100)
+        else if (i>=10 && i<100)
             mapVal = "0"+to_string(i);
         else
             mapVal=to_string(i);
