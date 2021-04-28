@@ -133,7 +133,7 @@ void merge_sort(list<Data*>::iterator start, list<Data*>::iterator end) {
         return;
     auto mid = next(start, distance(start,end)/2);
     merge_sort(start, mid);
-    merge_sort(mid, end);
+    merge_sort(++mid, end);
     auto outIt = start;
     merge(start, mid, mid, end, outIt);
 }
