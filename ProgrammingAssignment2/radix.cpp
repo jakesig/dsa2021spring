@@ -138,6 +138,18 @@ void merge_sort(list<Data*>::iterator start, list<Data*>::iterator end) {
     merge(start, mid, mid, end, outIt);
 }
 
+void bubble_sort(list<Data*>::iterator start, list<Data*>::iterator end) {
+    for (auto it = start; it != end; ++it)
+        for (auto it2 = start; distance(it2,it)>0; ++it2) {
+            int ssn1 = stoi((*it)->ssn.substr(0, 3) + (*it)->ssn.substr(4, 2) + (*it)->ssn.substr(7, 3));
+            int ssn2 = stoi((*it2)->ssn.substr(0, 3) + (*it2)->ssn.substr(4, 2) + (*it2)->ssn.substr(7, 3));
+            if (ssn1 < ssn2) {
+                swap(it, it2);
+                cout << "Swapped " << (*it)->lastName << " and " << (*it2)->lastName << "\n";
+            }
+        }
+}
+
 void sortBySSN(list<Data *> l) {
 
     auto listIt = l.begin();
@@ -205,7 +217,7 @@ void sortBySSN(list<Data *> l) {
 
 void sortDataList(list<Data *> &l) {
 
-    merge_sort(l.begin(), l.end());
+    bubble_sort(l.begin(), l.end());
 
     auto listIt = l.begin();
 
