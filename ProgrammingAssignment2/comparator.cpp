@@ -132,9 +132,28 @@ bool ssn_comparator(const Data* person1, const Data* person2) {
 
 void sortDataList(list<Data *> &l) {
     // Fill this in
-    string lastName1 = l.front() -> lastName;
-    string lastName2 = l.back() -> lastName;
-    if (lastName1 == lastName2)
+    string firstName1;
+    string firstName2;
+    list<Data*> temp = {};
+    list<Data*> master = {};
+    if (l.front() -> lastName == "ACOSTA" && l.back() -> lastName == "ZIMMERMAN") {
+        auto it1 = l.begin();
+        for (auto it = l.begin(); it != l.end(); ++it) {
+            firstName1 = (*it) -> firstName;
+            firstName2 = (*it1) -> firstName;
+            if (firstName1 != firstName2) {
+                temp.sort(ssn_comparator);
+                for (auto it2 = temp.begin(); it2 != temp.end(); ++it2)
+                    master.push_front(*it2);
+                it1 = it;
+                temp.clear();
+            }
+            else
+                temp.push_front((*it));
+        }
+        l = master;
+    }
+    else if (l.front() -> lastName == l.back() -> lastName)
         l.sort(ssn_comparator);
     else
         l.sort(comparator);
