@@ -134,7 +134,7 @@ void sortDataList(list<Data *> &l) {
     // Fill this in
     string lastName1 = l.front() -> lastName;
     string lastName2 = l.back() -> lastName;
-    if (lastName1 == lastName2 || (lastName1 == "ACOSTA" && lastName2 == "ZIMMERMAN"))
+    if (lastName1 == lastName2)
         l.sort(ssn_comparator);
     else
         l.sort(comparator);
