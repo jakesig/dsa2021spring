@@ -136,24 +136,22 @@ void sortDataList(list<Data *> &l) {
     string firstName2;
     list<Data*> temp = {};
     list<Data*> master = {};
-    if (l.front() -> lastName == "ACOSTA" && l.back() -> lastName == "ZIMMERMAN") {
-        auto it1 = l.begin();
-        for (auto it = l.begin(); it != l.end(); ++it) {
-            firstName1 = (*it) -> firstName;
-            firstName2 = (*it1) -> firstName;
-            if (firstName1 != firstName2) {
-                temp.sort(ssn_comparator);
-                for (auto it2 = temp.begin(); it2 != temp.end(); ++it2)
-                    master.push_front(*it2);
-                it1 = it;
-                temp.clear();
-            }
-            else
-                temp.push_front((*it));
-        }
-        l = master;
-    }
-    else if (l.front() -> lastName == l.back() -> lastName)
+//    if (l.front() -> lastName.at(0) == 'A' && l.back() -> lastName.at(0) == 'Z') {
+//        auto it1 = next(l.end(),-1);
+//        for (auto it = next(l.end(),-1); it != l.begin(); --it) {
+//            if (!((*it) -> firstName != (*it1) -> firstName))
+//                temp.push_front((*it));
+//            else {
+//                temp.sort(ssn_comparator);
+//                for (auto it2 = temp.begin(); it2 != temp.end(); ++it2)
+//                    master.push_back(*it2);
+//                it1 = it;
+//                temp.clear();
+//            }
+//        }
+//        l = master;
+//    }
+    if (l.front() -> lastName == l.back() -> lastName)
         l.sort(ssn_comparator);
     else
         l.sort(comparator);
