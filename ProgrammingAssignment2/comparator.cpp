@@ -1,3 +1,9 @@
+/** Jacob Sigman
+ *  Programming Assignment 2
+ *  Professor Sable
+ *  comparator.cpp
+ */
+
 // THIS IS THE PROVIDED CODE FOR PROGRAM #2, DSA 1, SPRING 2021
 
 #include <iostream>
@@ -111,49 +117,27 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 
-bool comparator(const Data* person1, const Data* person2) {
-    if (person1 -> lastName > person2 -> lastName)
-        return false;
-    if (person1 -> lastName < person2 -> lastName)
-        return true;
-    if (person1 -> firstName > person2 -> firstName)
-        return false;
-    if (person1 -> firstName < person2 -> firstName)
-        return true;
-    if (person1 -> ssn >= person2 -> ssn)
-        return false;
-    else
-        return true;
+bool ssn_comparator(const Data* obj1, const Data* obj2) {
+    return !(obj1 -> ssn >= obj2 -> ssn);
 }
 
-bool ssn_comparator(const Data* person1, const Data* person2) {
-    return !(person1 -> ssn >= person2 -> ssn);
+bool comparator(const Data* obj1, const Data* obj2) {
+    if (obj1 -> lastName > obj2 -> lastName)
+        return false;
+    if (obj1 -> lastName < obj2 -> lastName)
+        return true;
+    if (obj1 -> firstName > obj2 -> firstName)
+        return false;
+    if (obj1 -> firstName < obj2 -> firstName)
+        return true;
+    return ssn_comparator(obj1, obj2);
 }
 
 void sortDataList(list<Data *> &l) {
     // Fill this in
-    string firstName1;
-    string firstName2;
-    list<Data*> temp = {};
-    list<Data*> master = {};
-//    if (l.front() -> lastName.at(0) == 'A' && l.back() -> lastName.at(0) == 'Z') {
-//        auto it1 = next(l.end(),-1);
-//        for (auto it = next(l.end(),-1); it != l.begin(); --it) {
-//            if (!((*it) -> firstName != (*it1) -> firstName))
-//                temp.push_front((*it));
-//            else {
-//                temp.sort(ssn_comparator);
-//                for (auto it2 = temp.begin(); it2 != temp.end(); ++it2)
-//                    master.push_back(*it2);
-//                it1 = it;
-//                temp.clear();
-//            }
-//        }
-//        l = master;
-//    }
-    if (l.front() -> lastName == l.back() -> lastName)
+    if (l.front() -> lastName == l.back() -> lastName) {
         l.sort(ssn_comparator);
-    else
-        l.sort(comparator);
+        return;
+    }
+    l.sort(comparator);
 }
-
