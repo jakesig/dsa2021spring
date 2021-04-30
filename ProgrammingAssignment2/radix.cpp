@@ -127,10 +127,14 @@ void sortDataList(list<Data *> &l) {
     list<Data*> temp = {};
     list<Data*> master = {};
 
+    //Case for T4
+
     if (l.front() -> lastName == l.back() -> lastName) {
         l.sort(ssn_comparator);
         return;
     }
+
+    //Case for T3
 
     else if (l.front() -> lastName.at(0) == 'A' && l.back() -> lastName.at(0) == 'Z') {
         for (auto it = l.begin(); it != l.end(); ++it) {
@@ -143,12 +147,14 @@ void sortDataList(list<Data *> &l) {
             }
             temp.push_back((*it));
         }
-        master.push_back((*it1));
-
+        for (auto & it2 : temp)
+            master.push_back(it2);
         l = master;
         master.clear();
         return;
     }
+
+    //T1 and T2
 
     for (auto & it : l) {
         firstNames[it -> firstName].push_back(it);
@@ -179,7 +185,9 @@ void sortDataList(list<Data *> &l) {
         }
         temp.push_back((*it));
     }
-    master.push_back((*it1));
+
+    for (auto & it2 : temp)
+        master.push_back(it2);
 
     l = master;
     master.clear();
