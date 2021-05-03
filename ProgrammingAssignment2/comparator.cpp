@@ -2,6 +2,9 @@
  *  Programming Assignment 2
  *  Professor Sable
  *  comparator.cpp
+ *
+ *  This code takes a list of Data objects containing a first name, last name, and social security number.
+ *  The implementation of the sort uses the built-in sort method with booleans.
  */
 
 // THIS IS THE PROVIDED CODE FOR PROGRAM #2, DSA 1, SPRING 2021
@@ -117,9 +120,27 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 
+/** ssn_comparator(): A boolean for sorting by social security numbers.
+ *
+ * @param {Data*} obj1 First object to compare.
+ * @param {Data*} obj2 Second object to compare.
+ * @return {bool} Value being returned to the sort method.
+ */
+
 inline bool ssn_comparator(const Data* obj1, const Data* obj2) {
+
+    /** Return a boolean corresponding to the comparison between two social security numbers.
+     */
+
     return !(obj1 -> ssn >= obj2 -> ssn);
 }
+
+/** comparator(): A boolean for sorting by first name, last name, and social security number.
+ *
+ * @param {Data*} obj1 First object to compare.
+ * @param {Data*} obj2 Second object to compare.
+ * @return {bool} Value being returned to the sort method.
+ */
 
 inline bool comparator(const Data* obj1, const Data* obj2) {
     if (obj1 -> lastName > obj2 -> lastName)
@@ -130,14 +151,30 @@ inline bool comparator(const Data* obj1, const Data* obj2) {
         return false;
     if (obj1 -> firstName < obj2 -> firstName)
         return true;
+
+    /** Call the boolean that compares social security numbers.
+     */
+
     return ssn_comparator(obj1, obj2);
 }
 
+/** sortDataList(): Sorts list passed to method using built-in sort method.
+ *
+ * @param {list<Data *>} l The list to sort.
+ */
+
 void sortDataList(list<Data *> &l) {
-    // Fill this in
+
+    /** If the last names of the front and back of the list are the same, sort by social security number.
+     */
+
     if (l.front() -> lastName == l.back() -> lastName) {
         l.sort(ssn_comparator);
         return;
     }
+
+    /** Otherwise, sort by first name, last name, and social security number.
+     */
+
     l.sort(comparator);
 }
