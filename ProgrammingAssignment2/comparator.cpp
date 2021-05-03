@@ -117,11 +117,11 @@ int main() {
 // You may add global variables, functions, and/or
 // class defintions here if you wish.
 
-bool ssn_comparator(const Data* obj1, const Data* obj2) {
+inline bool ssn_comparator(const Data* obj1, const Data* obj2) {
     return !(obj1 -> ssn >= obj2 -> ssn);
 }
 
-bool comparator(const Data* obj1, const Data* obj2) {
+inline bool comparator(const Data* obj1, const Data* obj2) {
     if (obj1 -> lastName > obj2 -> lastName)
         return false;
     if (obj1 -> lastName < obj2 -> lastName)
