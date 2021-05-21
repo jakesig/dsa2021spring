@@ -1,7 +1,7 @@
 ## dsa2021spring
 
 **Author:** Jake Sigman  
-**Email:** <jsigman04@gmail.com>
+**Email:** <jsigman04@gmail.com>  
 **Course Code:** ECE-264  
 **Course:** Data Structures and Algorithms  
 **School:** The Cooper Union for the Advancement of Science and Art  
