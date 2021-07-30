@@ -17,6 +17,8 @@ Queues, outputting the results to an output file.
 #### Directory Information `Programming Assignment 1/`
 **`Programming Assignment 1.pdf`**: Assignment description   
 **`main.cpp`**: Main CPP file   
+**`input.txt`**: Input file   
+**`output.txt`**: Output file   
 
 ### Programming Assignment 2
 This code takes a list of Data objects containing a first name, last name, 
