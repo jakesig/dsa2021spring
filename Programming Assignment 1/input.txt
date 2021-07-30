@@ -1,0 +1,5 @@
+create d1 stack
+push d1 45.56
+pop d1
+push d1 45.5456465455656
+pop d1
